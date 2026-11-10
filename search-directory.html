@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Search Directory</title>
+
+    <style>
+
+        .hidden { display: none; }
+
+        .user-card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 5px; }
+
+        .error { color: red; }
+
+        #search { padding: 8px; width: 100%; margin-bottom: 20px; max-width: 300px; }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="app">
+
+        <h1>User Directory</h1>
+
+        <input type="text" id="search" placeholder="Search by name or email...">
+
+        <div id="loading">Loading...</div>
+
+        <div id="error" class="hidden error"></div>
+
+        <div id="users-container"></div>
+
+    </div>
+
+    <script src="search-directory.js"></script>
+
+</body>
+
+</html>
