@@ -1,0 +1,181 @@
+// Week 6 Daily Challenges
+
+// Day 1: Delayed Promise
+
+// Day 1: Delayed Promise
+
+function delay(ms) {
+
+  return new Promise(resolve => setTimeout(resolve, ms));
+
+}
+
+async function testDelay() {
+
+  console.log("Start");
+
+  await delay(2000);
+
+  console.log("This prints after 2 seconds");
+
+}
+
+testDelay();
+
+// Day 2: Promise Chain
+
+// Day 2: Promise Chain 
+
+function task1() { return new Promise(res => setTimeout(() => res("Task 1 done"), 1000)); }
+
+function task2() { return new Promise(res => setTimeout(() => res("Task 2 done"), 1500)); }
+
+function task3() { return new Promise(res => setTimeout(() => res("Task 3 done"), 500)); }
+
+async function runChain() {
+
+  console.time("Chain Time");
+
+  await task1().then(console.log);
+
+  await task2().then(console.log);
+
+  await task3().then(console.log);
+
+  console.timeEnd("Chain Time");
+
+}
+
+runChain();
+
+// Day 3: Error Handling
+
+console.log("--- Day 3: Error Handling ---");
+
+async function fetchUserSafe(id) {
+
+  try {
+
+    const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+
+    if (!res.ok) throw new Error("User not found");
+
+    return await res.json();
+
+  } catch (error) {
+
+    console.log("Returning default user due to error:", error.message);
+
+    return { id: 0, name: "Default User" };
+
+  }
+
+}
+
+fetchUserSafe(9999).then(user => console.log("Result:", user));
+
+// Day 4: Rewrite with Async/Await
+
+// 1. The original Callback-based function
+
+function getOldUserData(userId, callback) {
+
+  setTimeout(() => {
+
+    callback({ id: userId, name: "SketchAlien", source: "Callback" });
+
+  }, 1000);
+
+}
+
+// 2. The Promise-based version (from Task 11.2)
+
+function getPromiseUserData(userId) {
+
+  return new Promise((resolve, reject) => {
+
+    setTimeout(() => {
+
+      if (userId > 0) {
+
+        resolve({ id: userId, name: "SketchAlien", source: "Promise" });
+
+      } else {
+
+        reject("Invalid ID");
+
+      }
+
+    }, 1000);
+
+  });
+
+}
+
+// 3. The Async/Await rewrite (The Day 4 Challenge)
+
+async function getUserDataModernWay(userId) {
+
+  try {
+
+    console.log("Fetching data using async/await...");
+
+    // 'await' pauses the function until the Promise resolves
+
+    const user = await getPromiseUserData(userId);
+
+    console.log("Data received:", user);
+
+  } catch (error) {
+
+    console.error("Error:", error);
+
+  }
+
+}
+
+// Run it!
+
+getUserDataModernWay(1);
+
+// (We already did this in Task 11.4, so this is just a note)
+
+// Day 5: Parallel Fetches 
+
+async function fetchParallel() {
+
+  const urls = [
+
+    "https://jsonplaceholder.typicode.com/users/1",
+
+    "https://jsonplaceholder.typicode.com/users/2",
+
+    "https://jsonplaceholder.typicode.com/users/3"
+
+  ];
+
+ 
+
+  const promises = urls.map(url => fetch(url).then(res => res.json()));
+
+ 
+
+  const results = await Promise.allSettled(promises);
+
+  results.forEach((result, index) => {
+
+    if (result.status === "fulfilled") {
+
+      console.log(`User ${index + 1}:`, result.value.name);
+
+    } else {
+
+      console.log(`User ${index + 1} failed:`, result.reason);
+
+    }
+
+  });
+
+}
+
+fetchParallel();
